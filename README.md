@@ -1,1 +1,1 @@
-# Reading-Diary-Application
+# Reading Diary Application
