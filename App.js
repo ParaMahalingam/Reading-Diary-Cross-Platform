@@ -3,15 +3,16 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, SafeAreaView } from 'react-native';
 import Button from './components/Button';
 import Input from './components/Input';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function App() {
 
-  const onPress = () => {
-    alert("Title is " + title)
-    alert("Date is " + date)
-    alert("Pages Read is " + pagesread)
-    alert("Child Comment is " + childcomment)
-    alert("Teacher/Parent Comment is " + tpcomment)
+  const onPress = async () => {
+    const items = await AsyncStorage.getItem('entries');
+    alert(items);
+    // alert("Date is " + date);
+    // alert("Pages Read is " + pagesread);
+    // alert("Child Comment is " + childcomment);
+    // alert("Teacher/Parent Comment is " + tpcomment);
   }
 
   const [date, setDate] = useState(null);
@@ -20,9 +21,20 @@ export default function App() {
   const [childcomment, setChildComment] = useState(null);
   const [tpcomment, setTPComment] = useState(null);
 
+  const SubmitHandler = async () => {
+    const x = { id: Date.now(), title, date };
+    //const update = [...xxx,x];
+    await AsyncStorage.setItem('entries', JSON.stringify(x));
+
+  }
+
+  clearAsyncStorage = async() => {
+    AsyncStorage.clear();
+}
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>NEW ENTRY{'\n'}</Text>
+      <Text style={styles.title}>{'\n'}{'\n'}NEW ENTRY{'\n'}</Text>
       <Text>Enter Book Title:</Text>
       <Input
         inputvalue={setTitle}
@@ -60,6 +72,19 @@ export default function App() {
       />
       <Button
         text='Add'
+        //onPress={onPress}
+        onPress={SubmitHandler}
+      />
+      <Text>{'\n'}</Text>
+      <Button
+        text='Display'
+        //onPress={onPress}
+        onPress={onPress}
+      />
+            <Text>{'\n'}</Text>
+      <Button
+        text='Wipe'
+        //onPress={onPress}
         onPress={onPress}
       />
     </SafeAreaView>
