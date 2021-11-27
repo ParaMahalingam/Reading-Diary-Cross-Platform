@@ -4,24 +4,24 @@ import { TextInput, StyleSheet } from 'react-native'
 
 
 
-const Input = ({ inputvalue, multi }) => {
-    return (
+const Input = ({ inputvalue, label, multi }) => {
+    return (   
         <TextInput
-        style={styles.input}
-        onChangeText={inputvalue}
-        multiline={multi ?? false}
-      //      placeholder="useless placeholder"
-      //      keyboardType="numeric"
-      />
+            style={styles.input}
+            onChangeText={inputvalue}
+            multiline={multi ?? false}
+        //      placeholder="useless placeholder"
+        //      keyboardType="numeric"
+        />
     )
 }
 //backgroundColor: '#FF5F7E' RED
 const styles = StyleSheet.create({
     input: {
         height: 40,
-        width: 300,
+       // width: 300,
         margin: 12,
-        borderWidth: 1,
+        borderWidth: 2,
         padding: 10,
     }
 })
