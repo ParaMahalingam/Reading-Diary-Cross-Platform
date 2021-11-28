@@ -95,9 +95,22 @@ function IndexScreen({ navigation }) {
         );
     };
 
+    // const Empty = ({ }) => {
+    //     if (entries.length == 0) {
+    //         return (
+    //             <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: 'bold' }}>No Entries</Text>
+    //         )
+    //     }
+    //     else {
+    //         return (
+    //             <View></View>
+    //         )
+    //     }
+    // }
+
     return (
         <View>
-
+            {/* <Empty /> */}
             <FlatList nestedScrollEnabled
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
