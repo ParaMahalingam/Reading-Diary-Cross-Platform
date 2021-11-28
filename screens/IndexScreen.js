@@ -70,12 +70,12 @@ function IndexScreen({ navigation }) {
             <View style={styles.listItem}>
                 <View style={{ flex: 3 }}>
                     <Text numberOfLines={1}>
-                        {ent?.title}
+                        {ent.title}
                     </Text>
                 </View>
                 <View style={{ flex: 2 }}>
                     <Text>
-                        {ent?.date}
+                        {ent.date}
                     </Text>
                 </View>
                 <View style={{ flex: 1 }}>
@@ -88,7 +88,7 @@ function IndexScreen({ navigation }) {
                         <MaterialIcons name="edit" size={25} color="black" />
                     </Pressable>
                 </View>
-                <Pressable onPress={() => removeEntry(ent?.id)}>
+                <Pressable onPress={() => removeEntry(ent.id)}>
                     <MaterialIcons name="delete" size={25} color="red" />
                 </Pressable>
             </View>
