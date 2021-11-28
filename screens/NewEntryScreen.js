@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, SafeAreaView, FlatList, TouchableOpacity, Alert } from 'react-native';
-
+import { StyleSheet, Text, View, ScrollView, TextInput, LogBox } from 'react-native';
 import Input from '../components/Input';
 import CustomButton from '../components/CustomButton';
 
+//Disable the Non-serializable values were found warning. This warning occurs due the callback function.
+LogBox.ignoreLogs([
+    'Non-serializable values were found in the navigation state',
+]);
+
 function NewEntryScreen({ navigation, route }) {
     const { callback } = route.params;
-    const [title, setTitle] = useState(null)
-    const [date, setDate] = useState(null)
-    const [pagesread, setPagesRead] = useState(null)
-    const [childcomment, setChildComment] = useState(null)
-    const [tpcomment, setTPComment] = useState(null)
+    const [title, setTitle] = useState(null);
+    const [date, setDate] = useState(null);
+    const [pagesread, setPagesRead] = useState(null);
+    const [childcomment, setChildComment] = useState(null);
+    const [tpcomment, setTPComment] = useState(null);
 
     const onPressHandler = () => {
-        callback(title, date, pagesread, childcomment, tpcomment)
-        navigation.pop()
-    }
+        callback(title, date, pagesread, childcomment, tpcomment);
+        navigation.pop();
+    };
 
 
     return (
