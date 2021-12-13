@@ -18,6 +18,7 @@ function NewEntryScreen({ navigation, route }) {
 
     const onPressHandler = () => {
         callback(title, date, pagesread, childcomment, tpcomment);
+        alert('New entry created!');
         navigation.pop();
     };
 

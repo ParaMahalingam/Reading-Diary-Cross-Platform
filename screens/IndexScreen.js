@@ -15,6 +15,21 @@ function IndexScreen({ navigation }) {
         setEntries([...entries, ent]);
     }
 
+    //Modify an existing entry. Take the modified data and then update the object.
+    const editEntry = (id, title, date, pagesread, childcomment, tpcomment) => {
+
+        const data = [...entries];
+        const index = data.findIndex(entry => entry.id === id);
+        
+        entries[index].title = title;
+        entries[index].date = date;
+        entries[index].pages = pagesread;
+        entries[index].c_comment = childcomment;
+        entries[index].tp_comment = tpcomment;
+
+        setEntries(data);
+    }
+
     //Delete an existing entry by ID
     const removeEntry = (id) => {
         setEntries(entries.filter(entry => entry.id !== id))
@@ -50,6 +65,7 @@ function IndexScreen({ navigation }) {
     useEffect(() => { open() }, [])
     useEffect(() => { save(entries) }, [entries])
 
+
     useEffect(() => {
 
         navigation.setOptions({
@@ -84,7 +100,7 @@ function IndexScreen({ navigation }) {
                     </Pressable>
                 </View>
                 <View style={{ flex: 1 }}>
-                    <Pressable onPress={() => navigation.navigate('EditEntry')}>
+                    <Pressable onPress={() => navigation.navigate('EditEntry', { ent, editEntry })}>
                         <MaterialIcons name="edit" size={25} color="black" />
                     </Pressable>
                 </View>
