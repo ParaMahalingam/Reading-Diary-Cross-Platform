@@ -4,18 +4,17 @@ import { TextInput, StyleSheet } from 'react-native'
 
 
 
-const Input = ({ inputvalue, label, multi, val }) => {
+const Input = ({ inputvalue, multi, val, editable }) => {
     return (
         <TextInput
             style={styles.input}
             onChangeText={inputvalue}
             multiline={multi ?? false}
             value={val}
-        //      keyboardType="numeric"
+            editable={editable}
         />
     )
 }
-//backgroundColor: '#FF5F7E' RED
 const styles = StyleSheet.create({
     input: {
         height: 40,

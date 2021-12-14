@@ -14,7 +14,7 @@ const CustomButton = ({ title, onPress }) => {
         </TouchableOpacity>
     )
 }
-//backgroundColor: '#FF5F7E' RED
+
 const styles = StyleSheet.create({
     buttoncontainer: {
         backgroundColor: '#34BE82',

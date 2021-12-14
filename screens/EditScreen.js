@@ -10,16 +10,29 @@ LogBox.ignoreLogs([
 
 function EditScreen({ navigation, route }) {
   const { ent: e, editEntry } = route.params;
-
+  console.log(route.params)
   const id = e.id;
   const [title, setTitle] = useState(e.title);
   const [date, setDate] = useState(e.date);
   const [pagesread, setPagesRead] = useState(e.pages);
   const [childcomment, setChildComment] = useState(e.c_comment);
   const [tpcomment, setTPComment] = useState(e.tp_comment);
+  const [bookCover, setBookCover] = useState(e.cover);
+
+
+  async function getBookCover() {
+    await fetch(`https://www.googleapis.com/books/v1/volumes?q=${title}`)
+      .then(response => response.json())
+      .then(response => {
+        //console.log(response)
+        setBookCover(response.items[0].volumeInfo.imageLinks.thumbnail);
+        alert('Book cover retrieved!')
+      })
+      .catch(err => alert('Enter a valid title for cover!'));
+  }
 
   const onPressHandler = () => {
-    editEntry(id, title, date, pagesread, childcomment, tpcomment);
+    editEntry(id, title, date, pagesread, childcomment, tpcomment, bookCover);
     alert('Modifed!');
     navigation.pop();
   };
@@ -38,7 +51,11 @@ function EditScreen({ navigation, route }) {
       <TextInput style={{ padding: 10, borderWidth: 2, margin: 12, height: 100 }} onChangeText={setChildComment} multiline value={childcomment} />
       <Text>Teacher / Parent Comment:</Text>
       <TextInput style={{ padding: 10, borderWidth: 2, margin: 12, height: 100 }} onChangeText={setTPComment} multiline value={tpcomment} />
+      <Text>Book cover image link:</Text>
+      <Input val={bookCover} editable={false} />
       <View style={{ alignItems: 'center' }}>
+        <CustomButton title='Get Cover' onPress={getBookCover} />
+        <Text></Text>
         <CustomButton title='Modify' onPress={onPressHandler} />
       </View>
     </ScrollView>

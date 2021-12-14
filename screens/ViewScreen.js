@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Text, Image, StyleSheet, ScrollView } from 'react-native';
 
 function ViewScreen({ route, navigation }) {
-  const { id, title, date, pages, c_comment, tp_comment } = route.params
+  const { id, title, date, pages, c_comment, tp_comment, cover } = route.params
 
 
   return (
@@ -13,8 +11,12 @@ function ViewScreen({ route, navigation }) {
         {title}
       </Text>
       <Text style={{ fontSize: 25 }}>
-        ID:{'\n'}{'\n'}{id}{'\n'}{'\n'}Date:{'\n'}{'\n'}{date}{'\n'}{'\n'}Pages read:{'\n'}{'\n'}{pages}{'\n'}{'\n'}Child comment:{'\n'}{'\n'}{c_comment}{'\n'}{'\n'}Teacher / Parent comment:{'\n'}{'\n'}{tp_comment}
+        ID:{'\n'}{'\n'}{id}{'\n'}{'\n'}Date:{'\n'}{'\n'}{date}{'\n'}{'\n'}Pages read:{'\n'}{'\n'}{pages}{'\n'}{'\n'}Child comment:{'\n'}{'\n'}{c_comment}{'\n'}{'\n'}Teacher / Parent comment:{'\n'}{'\n'}{tp_comment}{'\n'}{'\n'}Book cover:{'\n'}
       </Text>
+      <Image
+        style={{ width: 200, height: 300 }}
+        source={{ uri: cover }}
+      />
     </ScrollView>
   );
 };

@@ -10,13 +10,13 @@ function IndexScreen({ navigation }) {
     const [entries, setEntries] = useState([]);
 
     //Add a newly created entry to the array.
-    const addEntry = (title, date, pagesread, childcomment, tpcomment) => {
-        const ent = { id: Date.now(), title: title, date: date, pages: pagesread, c_comment: childcomment, tp_comment: tpcomment }
+    const addEntry = (title, date, pagesread, childcomment, tpcomment, bookcover) => {
+        const ent = { id: Date.now(), title: title, date: date, pages: pagesread, c_comment: childcomment, tp_comment: tpcomment, cover: bookcover }
         setEntries([...entries, ent]);
     }
 
     //Modify an existing entry. Take the modified data and then update the object.
-    const editEntry = (id, title, date, pagesread, childcomment, tpcomment) => {
+    const editEntry = (id, title, date, pagesread, childcomment, tpcomment, bookcover) => {
 
         const data = [...entries];
         const index = data.findIndex(entry => entry.id === id);
@@ -26,7 +26,7 @@ function IndexScreen({ navigation }) {
         entries[index].pages = pagesread;
         entries[index].c_comment = childcomment;
         entries[index].tp_comment = tpcomment;
-
+        entries[index].cover = bookcover;
         setEntries(data);
     }
 
@@ -95,7 +95,7 @@ function IndexScreen({ navigation }) {
                     </Text>
                 </View>
                 <View style={{ flex: 1 }}>
-                    <Pressable onPress={() => navigation.navigate('ViewEntry', { id: ent.id, title: ent.title, date: ent.date, pages: ent.pages, c_comment: ent.c_comment, tp_comment: ent.tp_comment })}>
+                    <Pressable onPress={() => navigation.navigate('ViewEntry', { id: ent.id, title: ent.title, date: ent.date, pages: ent.pages, c_comment: ent.c_comment, tp_comment: ent.tp_comment,cover: ent.cover })}>
                         <MaterialIcons name="remove-red-eye" size={25} color="green" />
                     </Pressable>
                 </View>
@@ -111,22 +111,8 @@ function IndexScreen({ navigation }) {
         );
     };
 
-    // const Empty = ({ }) => {
-    //     if (entries.length == 0) {
-    //         return (
-    //             <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: 'bold' }}>No Entries</Text>
-    //         )
-    //     }
-    //     else {
-    //         return (
-    //             <View></View>
-    //         )
-    //     }
-    // }
-
     return (
         <View>
-            {/* <Empty /> */}
             <FlatList nestedScrollEnabled
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
