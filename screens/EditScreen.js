@@ -10,7 +10,6 @@ LogBox.ignoreLogs([
 
 function EditScreen({ navigation, route }) {
   const { ent: e, editEntry } = route.params;
-  console.log(route.params)
   const id = e.id;
   const [title, setTitle] = useState(e.title);
   const [date, setDate] = useState(e.date);
@@ -19,17 +18,16 @@ function EditScreen({ navigation, route }) {
   const [tpcomment, setTPComment] = useState(e.tp_comment);
   const [bookCover, setBookCover] = useState(e.cover);
 
-
+  //Get the book cover using the Google books API. Searched for the book cover based on the title.
   async function getBookCover() {
     await fetch(`https://www.googleapis.com/books/v1/volumes?q=${title}`)
       .then(response => response.json())
       .then(response => {
-        //console.log(response)
         setBookCover(response.items[0].volumeInfo.imageLinks.thumbnail);
         alert('Book cover retrieved!')
       })
       .catch(err => alert('Enter a valid title for cover!'));
-  }
+  };
 
   const onPressHandler = () => {
     editEntry(id, title, date, pagesread, childcomment, tpcomment, bookCover);
@@ -55,7 +53,7 @@ function EditScreen({ navigation, route }) {
       <Input val={bookCover} editable={false} />
       <View style={{ alignItems: 'center' }}>
         <CustomButton title='Get Cover' onPress={getBookCover} />
-        <Text></Text>
+        <Text> </Text>
         <CustomButton title='Modify' onPress={onPressHandler} />
       </View>
     </ScrollView>

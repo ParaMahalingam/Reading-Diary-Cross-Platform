@@ -13,14 +13,14 @@ function IndexScreen({ navigation }) {
     const addEntry = (title, date, pagesread, childcomment, tpcomment, bookcover) => {
         const ent = { id: Date.now(), title: title, date: date, pages: pagesread, c_comment: childcomment, tp_comment: tpcomment, cover: bookcover }
         setEntries([...entries, ent]);
-    }
+    };
 
     //Modify an existing entry. Take the modified data and then update the object.
     const editEntry = (id, title, date, pagesread, childcomment, tpcomment, bookcover) => {
 
         const data = [...entries];
         const index = data.findIndex(entry => entry.id === id);
-        
+
         entries[index].title = title;
         entries[index].date = date;
         entries[index].pages = pagesread;
@@ -28,12 +28,12 @@ function IndexScreen({ navigation }) {
         entries[index].tp_comment = tpcomment;
         entries[index].cover = bookcover;
         setEntries(data);
-    }
+    };
 
     //Delete an existing entry by ID
     const removeEntry = (id) => {
         setEntries(entries.filter(entry => entry.id !== id))
-    }
+    };
 
     //Save the entries to Async storage, so that the entries can be retried when the app is re-opened.
     const save = async () => {
@@ -44,7 +44,7 @@ function IndexScreen({ navigation }) {
             console.log('Unable to save due to: ' + err)
         }
 
-    }
+    };
 
     //Load existing entries from Async storage and then add them to the array.
     const open = async () => {
@@ -62,10 +62,8 @@ function IndexScreen({ navigation }) {
         }
     }
 
-    useEffect(() => { open() }, [])
-    useEffect(() => { save(entries) }, [entries])
-
-
+    useEffect(() => { open() }, []);
+    useEffect(() => { save(entries) }, [entries]);
     useEffect(() => {
 
         navigation.setOptions({
@@ -78,7 +76,7 @@ function IndexScreen({ navigation }) {
                 />
             )
         })
-    }, [entries])
+    }, [entries]);
 
 
     const ListItem = ({ ent }) => {
@@ -95,7 +93,7 @@ function IndexScreen({ navigation }) {
                     </Text>
                 </View>
                 <View style={{ flex: 1 }}>
-                    <Pressable onPress={() => navigation.navigate('ViewEntry', { id: ent.id, title: ent.title, date: ent.date, pages: ent.pages, c_comment: ent.c_comment, tp_comment: ent.tp_comment,cover: ent.cover })}>
+                    <Pressable onPress={() => navigation.navigate('ViewEntry', { id: ent.id, title: ent.title, date: ent.date, pages: ent.pages, c_comment: ent.c_comment, tp_comment: ent.tp_comment, cover: ent.cover })}>
                         <MaterialIcons name="remove-red-eye" size={25} color="green" />
                     </Pressable>
                 </View>
@@ -114,7 +112,6 @@ function IndexScreen({ navigation }) {
     return (
         <View>
             <FlatList nestedScrollEnabled
-                showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
                 data={entries}
                 renderItem={({ item }) => <ListItem ent={item} />}
@@ -133,7 +130,7 @@ const styles = StyleSheet.create({
         elevation: 12,
         borderRadius: 7,
         marginVertical: 10,
-    },
+    }
 });
 
 export default IndexScreen;

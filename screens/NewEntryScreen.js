@@ -3,7 +3,7 @@ import { Text, View, ScrollView, TextInput, LogBox } from 'react-native';
 import Input from '../components/Input';
 import CustomButton from '../components/CustomButton';
 
-//Disable the Non-serializable values were found warning. This warning occurs due the callback function.
+//Disable the Non-serializable values were found warning. This warning occurs due to the callback function.
 LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
 ]);
@@ -12,14 +12,14 @@ LogBox.ignoreLogs([
 
 function NewEntryScreen({ navigation, route }) {
     const { callback } = route.params;
-    const [title, setTitle] = useState(null);
-    const [date, setDate] = useState(null);
-    const [pagesread, setPagesRead] = useState(null);
-    const [childcomment, setChildComment] = useState(null);
-    const [tpcomment, setTPComment] = useState(null);
+    const [title, setTitle] = useState('');
+    const [date, setDate] = useState('');
+    const [pagesread, setPagesRead] = useState('');
+    const [childcomment, setChildComment] = useState('');
+    const [tpcomment, setTPComment] = useState('');
     const [bookCover, setBookCover] = useState('Press the Get Cover button.');
 
-
+    //Get the book cover using the Google books API. Searched for the book cover based on the title.
     async function getBookCover() {
         await fetch(`https://www.googleapis.com/books/v1/volumes?q=${title}`)
             .then(response => response.json())
@@ -29,7 +29,7 @@ function NewEntryScreen({ navigation, route }) {
                 alert('Book cover retrieved!')
             })
             .catch(err => alert('Enter a valid title for cover!'));
-    }
+    };
 
     const onPressHandler = () => {
         callback(title, date, pagesread, childcomment, tpcomment, bookCover);
@@ -53,7 +53,7 @@ function NewEntryScreen({ navigation, route }) {
             <Input val={bookCover} editable={false} />
             <View style={{ alignItems: 'center' }}>
                 <CustomButton title='Get Cover' onPress={getBookCover} />
-                <Text></Text>
+                <Text> </Text>
                 <CustomButton title='Add' onPress={onPressHandler} />
             </View>
         </ScrollView>

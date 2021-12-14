@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Text, Image, StyleSheet, ScrollView } from 'react-native';
 
 function ViewScreen({ route, navigation }) {
-  const { id, title, date, pages, c_comment, tp_comment, cover } = route.params
+  const { id, title, date, pages, c_comment, tp_comment, cover } = route.params;
 
 
   return (
