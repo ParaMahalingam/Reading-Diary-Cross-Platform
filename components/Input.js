@@ -18,7 +18,6 @@ const Input = ({ inputvalue, multi, val, editable }) => {
 const styles = StyleSheet.create({
     input: {
         height: 40,
-        // width: 300,
         margin: 12,
         borderWidth: 2,
         padding: 10,

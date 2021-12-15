@@ -69,7 +69,7 @@ function IndexScreen({ navigation }) {
         navigation.setOptions({
             headerRight: () => (
                 <Button
-                    title="Add"
+                    title="+ New"
                     onPress={() => {
                         navigation.navigate('NewEntry', { callback: addEntry });
                     }}
@@ -89,7 +89,7 @@ function IndexScreen({ navigation }) {
                 </View>
                 <View style={{ flex: 2 }}>
                     <Text>
-                        {ent.date}
+                        {new Date(ent.date).toLocaleDateString()}
                     </Text>
                 </View>
                 <View style={{ flex: 1 }}>

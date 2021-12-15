@@ -11,7 +11,7 @@ function ViewScreen({ route, navigation }) {
         {title}
       </Text>
       <Text style={{ fontSize: 25 }}>
-        ID:{'\n'}{'\n'}{id}{'\n'}{'\n'}Date:{'\n'}{'\n'}{date}{'\n'}{'\n'}Pages read:{'\n'}{'\n'}{pages}{'\n'}{'\n'}Child comment:{'\n'}{'\n'}{c_comment}{'\n'}{'\n'}Teacher / Parent comment:{'\n'}{'\n'}{tp_comment}{'\n'}{'\n'}Book cover:{'\n'}
+        Date:{'\n'}{'\n'}{new Date(date).toLocaleDateString()}{'\n'}{'\n'}Pages read:{'\n'}{'\n'}{pages}{'\n'}{'\n'}Child comment:{'\n'}{'\n'}{c_comment}{'\n'}{'\n'}Teacher / Parent comment:{'\n'}{'\n'}{tp_comment}{'\n'}{'\n'}Book cover:{'\n'}
       </Text>
       <Image
         style={{ width: 200, height: 300 }}
