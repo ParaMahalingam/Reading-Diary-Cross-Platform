@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, LogBox } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, KeyboardAvoidingView, LogBox, TextInput } from 'react-native';
 import Input from '../components/Input';
 import CustomButton from '../components/CustomButton';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -13,7 +13,7 @@ function EditScreen({ navigation, route }) {
   const { ent: e, editEntry } = route.params;
   const id = e.id;
   const [title, setTitle] = useState(e.title);
-  const [date, setDate] = useState(e.date);
+  const [date, setDate] = useState(new Date(e.date));
   const [pagesread, setPagesRead] = useState(e.pages);
   const [childcomment, setChildComment] = useState(e.c_comment);
   const [tpcomment, setTPComment] = useState(e.tp_comment);
@@ -43,6 +43,7 @@ function EditScreen({ navigation, route }) {
 
   return (
     <ScrollView>
+      <KeyboardAvoidingView behavior='padding'>
       <Text>Book Title:</Text>
       <Input inputvalue={setTitle} val={title} />
       <Text>Date:</Text>
@@ -60,6 +61,7 @@ function EditScreen({ navigation, route }) {
         <Text> </Text>
         <CustomButton title='Modify' onPress={onPressHandler} />
       </View>
+      </KeyboardAvoidingView>
     </ScrollView>
   );
 
