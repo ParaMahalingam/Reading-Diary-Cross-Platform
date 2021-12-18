@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Text, View, ScrollView, TextInput, LogBox, KeyboardAvoidingView, StyleSheet } from 'react-native';
+import { Text, View, ScrollView, TextInput, LogBox, KeyboardAvoidingView, StyleSheet, Button, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Input from '../components/Input';
 import CustomButton from '../components/CustomButton';
+
 //Disable the Non-serializable values were found warning. This warning occurs due to the callback function.
 LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
@@ -13,13 +14,35 @@ LogBox.ignoreLogs([
 function NewEntryScreen({ navigation, route }) {
     const { callback } = route.params;
     const [title, setTitle] = useState('');
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState(new Date(Date.now()));
     const [pagesread, setPagesRead] = useState('');
     const [childcomment, setChildComment] = useState('');
     const [tpcomment, setTPComment] = useState('');
     const [bookCover, setBookCover] = useState('Press the Get Cover button.');
 
-    // const [date123, setDate123] = useState(new Date());
+    const [datePicker, setdatePicker] = useState(false);
+
+    const showPicker = () => {
+        if (Platform.OS == 'web') {
+            alert('Date picker is not supported on browser')
+        }
+        else {
+            setdatePicker(true);
+        }
+    };
+
+    const onChange = (event, date) => {
+        if (Platform.OS === 'android') {
+            setdatePicker(false);
+        }
+
+        if (date) {
+            setDate(date);
+        }
+        else {
+            console.log('Operation cancelled')
+        }
+    };
 
     //Get the book cover using the Google books API. Search for the book cover based on the title.
     async function getBookCover() {
@@ -33,29 +56,28 @@ function NewEntryScreen({ navigation, route }) {
     };
 
     const onPressHandler = () => {
-        callback(title, date.toISOString(), pagesread, childcomment, tpcomment, bookCover);
+        callback({ id: Date.now(), title: title, date: date.toISOString(), pages: pagesread, c_comment: childcomment, tp_comment: tpcomment, cover: bookCover });
         navigation.pop();
     };
 
-    const onChange = (event, date) => {
-        setDate(date);
-    };
 
     return (
         <ScrollView>
             <KeyboardAvoidingView behavior='padding'>
-                <Text>Enter Book Title:</Text>
+                <Text style={styles.label}>Book Title:</Text>
                 <Input inputvalue={setTitle} />
-                <Text>Enter Date:</Text>
-                {/* <Input inputvalue={setDate} /> */}
-                <DateTimePicker value={date} display="spinner" onChange={onChange} />
-                <Text>Pages Read:</Text>
+                <Text style={styles.label}>Date: {date.toLocaleDateString()}</Text>
+                <View style={{ margin: 12 }}>
+                    {!datePicker && (<Button style={{ margin: 12 }} title="Pick Date" color="purple" onPress={showPicker} />)}
+                </View>
+                {datePicker && (<DateTimePicker value={date} display={Platform.OS === 'ios' ? 'spinner' : 'default'} onChange={onChange} />)}
+                <Text style={styles.label}>Pages Read:</Text>
                 <Input inputvalue={setPagesRead} />
-                <Text>Child Comment:</Text>
+                <Text style={styles.label}>Child Comment:</Text>
                 <TextInput style={styles.multiinput} onChangeText={setChildComment} multiline />
-                <Text>Teacher / Parent Comment:</Text>
+                <Text style={styles.label}>Teacher / Parent Comment:</Text>
                 <TextInput style={styles.multiinput} onChangeText={setTPComment} multiline />
-                <Text>Book cover image link:</Text>
+                <Text style={styles.label}>Book cover image link:</Text>
                 <Input val={bookCover} editable={false} />
 
                 <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
@@ -77,6 +99,16 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         margin: 12,
         height: 100
+    },
+    label:
+    {
+        fontSize: 15
+    },
+    datePicker: {
+        height: 200,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
     }
 });
 export default NewEntryScreen;

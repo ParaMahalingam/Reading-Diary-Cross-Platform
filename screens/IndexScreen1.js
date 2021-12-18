@@ -1,59 +1,44 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, Pressable } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const reducer = (state, action) => {
-    switch (action.type) {
-
-        //Create an Entry
-        case 'Create':
-            return [
-                ...state, action.payload
-            ];
-
-        //Load existing Entries
-        case 'Load':
-            return [
-                ...action.savedEntries
-            ];
-        //Delete an existing entry by ID
-        case 'Delete':
-            return state.filter(entry => entry.id !== action.DeleteID);
-
-        //Modify an existing entry. Take the modified data and then update the object.
-        case 'Update':
-            return state.map((entry) => {
-                if (entry.id === action.payload.id) {
-                    return action.payload;
-                }
-                else {
-                    return entry;
-                }
-            });
-
-        default:
-            return state;
-    }
-};
 
 
 function IndexScreen({ navigation }) {
 
-    const [state, dispatch] = useReducer(reducer, []);
-    const AsyncStorageKey = "ParaMahalingam";
+    const [entries, setEntries] = useState([]);
 
-
-    //Modify an existing entry. Take the modified data and then update the object.
-    const editEntry = (modified) => {
-        dispatch({ type: 'Update', payload: modified })
+    //Add a newly created entry to the array.
+    const addEntry = (title, date, pagesread, childcomment, tpcomment, bookcover) => {
+        const ent = { id: Date.now(), title: title, date: date, pages: pagesread, c_comment: childcomment, tp_comment: tpcomment, cover: bookcover }
+        setEntries([...entries, ent]);
     };
 
+    //Modify an existing entry. Take the modified data and then update the object.
+    const editEntry = (id, title, date, pagesread, childcomment, tpcomment, bookcover) => {
+
+        const data = [...entries];
+        const index = data.findIndex(entry => entry.id === id);
+
+        entries[index].title = title;
+        entries[index].date = date;
+        entries[index].pages = pagesread;
+        entries[index].c_comment = childcomment;
+        entries[index].tp_comment = tpcomment;
+        entries[index].cover = bookcover;
+        setEntries(data);
+    };
+
+    //Delete an existing entry by ID
+    const removeEntry = (id) => {
+        setEntries(entries.filter(entry => entry.id !== id))
+    };
 
     //Save the entries to Async storage, so that the entries can be retried when the app is re-opened.
     const save = async () => {
         try {
-            await AsyncStorage.setItem(AsyncStorageKey, JSON.stringify(state))
+            await AsyncStorage.setItem('entries', JSON.stringify(entries))
         }
         catch (err) {
             console.log('Unable to save due to: ' + err)
@@ -63,13 +48,10 @@ function IndexScreen({ navigation }) {
 
     //Load existing entries from Async storage and then add them to the array.
     const open = async () => {
-        //AsyncStorage.clear()
         try {
-            const existingEntries = await AsyncStorage.getItem(AsyncStorageKey)
+            const existingEntries = await AsyncStorage.getItem('entries')
             if (existingEntries != null) {
-                const savedEntries = JSON.parse(existingEntries);
-                dispatch({ type: 'Load', savedEntries })
-
+                setEntries(JSON.parse(existingEntries))
             }
             else {
                 console.log('No Entries')
@@ -80,10 +62,8 @@ function IndexScreen({ navigation }) {
         }
     }
 
-
-
     useEffect(() => { open() }, []);
-    useEffect(() => { save() }, [state]);
+    useEffect(() => { save(entries) }, [entries]);
     useEffect(() => {
 
         navigation.setOptions({
@@ -91,19 +71,12 @@ function IndexScreen({ navigation }) {
                 <Button
                     title="+ New"
                     onPress={() => {
-                        // navigation.navigate('NewEntry', { callback: addEntry });
-                        navigation.navigate('NewEntry',
-                            {
-                                callback: (payload) => {
-                                    dispatch({ type: 'Create', payload: payload });
-                                }
-                            });
-
+                        navigation.navigate('NewEntry', { callback: addEntry });
                     }}
                 />
             )
         })
-    }, [state]);
+    }, [entries]);
 
 
     const ListItem = ({ ent }) => {
@@ -120,7 +93,7 @@ function IndexScreen({ navigation }) {
                     </Text>
                 </View>
                 <View style={{ flex: 1 }}>
-                    <Pressable onPress={() => navigation.navigate('ViewEntry', ent)}>
+                    <Pressable onPress={() => navigation.navigate('ViewEntry', { id: ent.id, title: ent.title, date: ent.date, pages: ent.pages, c_comment: ent.c_comment, tp_comment: ent.tp_comment, cover: ent.cover })}>
                         <MaterialIcons name="remove-red-eye" size={25} color="green" />
                     </Pressable>
                 </View>
@@ -129,7 +102,7 @@ function IndexScreen({ navigation }) {
                         <MaterialIcons name="edit" size={25} color="black" />
                     </Pressable>
                 </View>
-                <Pressable onPress={() => dispatch({ type: 'Delete', DeleteID: ent.id })}>
+                <Pressable onPress={() => removeEntry(ent.id)}>
                     <MaterialIcons name="delete" size={25} color="red" />
                 </Pressable>
             </View>
@@ -140,7 +113,7 @@ function IndexScreen({ navigation }) {
         <View>
             <FlatList nestedScrollEnabled
                 contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
-                data={state}
+                data={entries}
                 renderItem={({ item }) => <ListItem ent={item} />}
             />
         </View>
