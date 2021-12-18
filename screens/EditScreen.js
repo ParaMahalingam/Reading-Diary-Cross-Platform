@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, KeyboardAvoidingView, LogBox, TextInput, Button, Platform } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, KeyboardAvoidingView, TextInput, Button, Platform } from 'react-native';
 import Input from '../components/Input';
 import CustomButton from '../components/CustomButton';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import ItemContext from '../contexts/ItemContext';
 
-//Disable the Non-serializable values were found warning. This warning occurs due the callback function.
-LogBox.ignoreLogs([
-  'Non-serializable values were found in the navigation state',
-]);
 
 function EditScreen({ navigation, route }) {
-  const { ent: e, editEntry } = route.params;
+  const { state, edit } = useContext(ItemContext);
+
+  const { ent: e, } = route.params;
   const id = e.id;
   const [title, setTitle] = useState(e.title);
   const [date, setDate] = useState(new Date(e.date));
@@ -58,9 +57,8 @@ function EditScreen({ navigation, route }) {
   };
 
   const onPressHandler = () => {
-    editEntry({ id: id, title: title, date: new Date(date).toISOString(), pages: pagesread, c_comment: childcomment, tp_comment: tpcomment, cover: bookCover });
-    alert('Modifed!');
-    navigation.pop();
+    edit({ id: id, title: title, date: new Date(date).toISOString(), pages: pagesread, c_comment: childcomment, tp_comment: tpcomment, cover: bookCover }, () => navigation.pop());
+    //alert('Modifed!');
   };
 
 

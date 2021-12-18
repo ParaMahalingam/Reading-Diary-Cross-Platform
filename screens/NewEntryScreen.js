@@ -1,18 +1,14 @@
-import React, { useState } from 'react';
-import { Text, View, ScrollView, TextInput, LogBox, KeyboardAvoidingView, StyleSheet, Button, Platform } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { Text, View, ScrollView, TextInput, KeyboardAvoidingView, StyleSheet, Button, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Input from '../components/Input';
 import CustomButton from '../components/CustomButton';
-
-//Disable the Non-serializable values were found warning. This warning occurs due to the callback function.
-LogBox.ignoreLogs([
-    'Non-serializable values were found in the navigation state',
-]);
-
+import ItemContext from '../contexts/ItemContext';
 
 
 function NewEntryScreen({ navigation, route }) {
-    const { callback } = route.params;
+    const { create } = useContext(ItemContext);
+    //const { callback } = route.params;
     const [title, setTitle] = useState('');
     const [date, setDate] = useState(new Date(Date.now()));
     const [pagesread, setPagesRead] = useState('');
@@ -22,6 +18,8 @@ function NewEntryScreen({ navigation, route }) {
 
     const [datePicker, setdatePicker] = useState(false);
 
+
+    //Show Date picker if its not a web browser
     const showPicker = () => {
         if (Platform.OS == 'web') {
             alert('Date picker is not supported on browser')
@@ -31,6 +29,7 @@ function NewEntryScreen({ navigation, route }) {
         }
     };
 
+    //Set date to variable
     const onChange = (event, date) => {
         if (Platform.OS === 'android') {
             setdatePicker(false);
@@ -56,8 +55,7 @@ function NewEntryScreen({ navigation, route }) {
     };
 
     const onPressHandler = () => {
-        callback({ id: Date.now(), title: title, date: date.toISOString(), pages: pagesread, c_comment: childcomment, tp_comment: tpcomment, cover: bookCover });
-        navigation.pop();
+        create({ id: Date.now(), title: title, date: date.toISOString(), pages: pagesread, c_comment: childcomment, tp_comment: tpcomment, cover: bookCover }, () => navigation.pop());
     };
 
 

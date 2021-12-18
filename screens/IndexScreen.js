@@ -1,88 +1,13 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, Pressable } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const reducer = (state, action) => {
-    switch (action.type) {
-
-        //Create an Entry
-        case 'Create':
-            return [
-                ...state, action.payload
-            ];
-
-        //Load existing Entries
-        case 'Load':
-            return [
-                ...action.savedEntries
-            ];
-        //Delete an existing entry by ID
-        case 'Delete':
-            return state.filter(entry => entry.id !== action.DeleteID);
-
-        //Modify an existing entry. Take the modified data and then update the object.
-        case 'Update':
-            return state.map((entry) => {
-                if (entry.id === action.payload.id) {
-                    return action.payload;
-                }
-                else {
-                    return entry;
-                }
-            });
-
-        default:
-            return state;
-    }
-};
+import ItemContext from '../contexts/ItemContext';
 
 
 function IndexScreen({ navigation }) {
+    const { state, remove, load, save } = useContext(ItemContext);
 
-    const [state, dispatch] = useReducer(reducer, []);
-    const AsyncStorageKey = "ParaMahalingam";
-
-
-    //Modify an existing entry. Take the modified data and then update the object.
-    const editEntry = (modified) => {
-        dispatch({ type: 'Update', payload: modified })
-    };
-
-
-    //Save the entries to Async storage, so that the entries can be retried when the app is re-opened.
-    const save = async () => {
-        try {
-            await AsyncStorage.setItem(AsyncStorageKey, JSON.stringify(state))
-        }
-        catch (err) {
-            console.log('Unable to save due to: ' + err)
-        }
-
-    };
-
-    //Load existing entries from Async storage and then add them to the array.
-    const open = async () => {
-        //AsyncStorage.clear()
-        try {
-            const existingEntries = await AsyncStorage.getItem(AsyncStorageKey)
-            if (existingEntries != null) {
-                const savedEntries = JSON.parse(existingEntries);
-                dispatch({ type: 'Load', savedEntries })
-
-            }
-            else {
-                console.log('No Entries')
-            }
-        }
-        catch (err) {
-            console.log('Unable to load due to: ' + err)
-        }
-    }
-
-
-
-    useEffect(() => { open() }, []);
+    useEffect(() => { load() }, []);
     useEffect(() => { save() }, [state]);
     useEffect(() => {
 
@@ -91,14 +16,7 @@ function IndexScreen({ navigation }) {
                 <Button
                     title="+ New"
                     onPress={() => {
-                        // navigation.navigate('NewEntry', { callback: addEntry });
-                        navigation.navigate('NewEntry',
-                            {
-                                callback: (payload) => {
-                                    dispatch({ type: 'Create', payload: payload });
-                                }
-                            });
-
+                        navigation.navigate('NewEntry');
                     }}
                 />
             )
@@ -125,11 +43,13 @@ function IndexScreen({ navigation }) {
                     </Pressable>
                 </View>
                 <View style={{ flex: 1 }}>
-                    <Pressable onPress={() => navigation.navigate('EditEntry', { ent, editEntry })}>
+                    <Pressable onPress={() => navigation.navigate('EditEntry', { ent })}>
                         <MaterialIcons name="edit" size={25} color="black" />
                     </Pressable>
                 </View>
-                <Pressable onPress={() => dispatch({ type: 'Delete', DeleteID: ent.id })}>
+                <Pressable onPress={() => {
+                    remove(ent.id)
+                }}>
                     <MaterialIcons name="delete" size={25} color="red" />
                 </Pressable>
             </View>
