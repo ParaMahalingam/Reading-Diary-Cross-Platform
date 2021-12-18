@@ -56,7 +56,17 @@ function IndexScreen({ navigation }) {
         );
     };
 
+
+    //Conditional based rendering, if there are no entries, it will display a No entries message. Otherwise, it will display the entries stored in state.
+    if (state.length == 0) {
+        return (
+            <View style={styles.noent}>
+                <Text style={styles.txtstyle}>No Entries, Why not create one? 🤠</Text>
+            </View>
+        )
+    }
     return (
+
         <View>
             <FlatList nestedScrollEnabled
                 contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
@@ -67,6 +77,7 @@ function IndexScreen({ navigation }) {
 
 
     );
+
 };
 
 const styles = StyleSheet.create({
@@ -77,6 +88,14 @@ const styles = StyleSheet.create({
         elevation: 12,
         borderRadius: 7,
         marginVertical: 10,
+    },
+    txtstyle: {
+        fontSize: 20,
+        textAlign: 'center',
+    },
+    noent: {
+        justifyContent: 'center',
+        flex: 1,
     }
 });
 
