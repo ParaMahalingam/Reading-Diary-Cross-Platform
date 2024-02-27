@@ -1,4 +1,4 @@
-# Reading Diary Cross-Platform Application
+# Reading Diary Application
 
 Welcome to the Reading Diary Cross-Platform Application! This mobile app, built using React Native and Expo, provides a convenient way to track your reading progress, write down notes, and organise your reading experiences.
 
